@@ -87,7 +87,7 @@ SELECT f.name AS Facility,CONCAT(m.firstname, ' ', m.surname) AS Name,
 (CASE
 	WHEN b.memid = 0 THEN f.guestcost*b.slots
 	ELSE f.membercost*b.slots
-	END) AS Cost
+END) Cost
 FROM Bookings b, Facilities f, Members m
 WHERE m.memid = b.memid
 AND f.facid = b.facid
@@ -100,7 +100,7 @@ SELECT DISTINCT CONCAT(m.firstname, ' ' ,m.surname) as Name, d.name as Facility
 FROM Members m,
 (SELECT  f.name AS name, b.memid from Facilities f, Bookings b
 WHERE f.facid = b.facid
-AND f.facid in (0,1)) AS d
+AND f.facid in (0,1)) d
 WHERE m.memid = d.memid
 ORDER BY Name;
 
@@ -112,10 +112,10 @@ FROM (SELECT f.name AS Facility,
 (CASE
 	WHEN b.memid = 0 THEN f.guestcost*b.slots
 	ELSE f.membercost*b.slots
-	END) AS Cost
+END) AS Cost
 FROM Bookings b, Facilities f, Members m
 WHERE m.memid = b.memid
-AND f.facid = b.facid) AS d
+AND f.facid = b.facid) d
 GROUP BY Facility
 HAVING Revenue < 1000
 ORDER BY Revenue DESC;
