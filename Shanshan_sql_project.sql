@@ -63,7 +63,7 @@ SELECT a.firstname, a.surname
 FROM Members a
 INNER JOIN (
     SELECT MAX(b.joindate) AS joindate
-    FROM Members b) c
+    FROM Members b) AS c
 ON a.joindate = c.joindate;
 
 /* Q7: How can you produce a list of all members who have used a tennis court?
@@ -84,10 +84,10 @@ the guest user's ID is always 0. Include in your output the name of the
 facility, the name of the member formatted as a single column, and the cost.
 Order by descending cost, and do not use any subqueries. */
 SELECT f.name AS Facility,CONCAT(m.firstname, ' ', m.surname) AS Name,
-(CASE
-	WHEN b.memid = 0 THEN f.guestcost*b.slots
-	ELSE f.membercost*b.slots
-END) Cost
+CASE
+	WHEN b.memid = 0 THEN f.guestcost * b.slots
+	ELSE f.membercost * b.slots
+END AS Cost
 FROM Bookings b, Facilities f, Members m
 WHERE m.memid = b.memid
 AND f.facid = b.facid
@@ -109,10 +109,10 @@ The output of facility name and total revenue, sorted by revenue. Remember
 that there's a different cost for guests and members! */
 SELECT Facility, SUM(Cost) AS Revenue
 FROM (SELECT f.name AS Facility,
-(CASE
+CASE
 	WHEN b.memid = 0 THEN f.guestcost*b.slots
 	ELSE f.membercost*b.slots
-END) AS Cost
+END  AS Cost
 FROM Bookings b, Facilities f, Members m
 WHERE m.memid = b.memid
 AND f.facid = b.facid) d
