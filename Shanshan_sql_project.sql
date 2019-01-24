@@ -52,8 +52,8 @@ more than $100? Return the name and monthly maintenance of the facilities
 in question. */
 SELECT name, monthlymaintenance,
 CASE
-		WHEN monthlymaintenance > 100 THEN "expensive"
-		ELSE "cheap"
+    WHEN monthlymaintenance > 100 THEN "expensive"
+    ELSE "cheap"
 END AS Type
 FROM Facilities;
 
@@ -74,7 +74,7 @@ SELECT DISTINCT CONCAT(m.firstname, ' ' ,m.surname) AS Name, f.name AS Facility
 FROM Members m, Facilities f, Bookings b
 WHERE m.memid = b.memid
 AND f.facid = b.facid
-AND f.facid in (0,1)
+AND f.facid IN (0,1)
 ORDER BY Name;
 
 /* Q8: How can you produce a list of bookings on the day of 2012-09-14 which
@@ -85,8 +85,8 @@ facility, the name of the member formatted as a single column, and the cost.
 Order by descending cost, and do not use any subqueries. */
 SELECT f.name AS Facility,CONCAT(m.firstname, ' ', m.surname) AS Name,
 CASE
-		WHEN b.memid = 0 THEN f.guestcost * b.slots
-		ELSE f.membercost * b.slots
+    WHEN b.memid = 0 THEN f.guestcost * b.slots
+    ELSE f.membercost * b.slots
 END AS Cost
 FROM Bookings b, Facilities f, Members m
 WHERE m.memid = b.memid
@@ -96,11 +96,11 @@ AND b.starttime < '2012-09-15'
 ORDER BY Cost DESC;
 
 /* Q9: This time, produce the same result as in Q8, but using a subquery. */
-SELECT DISTINCT CONCAT(m.firstname, ' ' ,m.surname) as Name, d.name as Facility
+SELECT DISTINCT CONCAT(m.firstname, ' ' ,m.surname) AS Name, d.name AS Facility
 FROM Members m,
-		(SELECT  f.name AS name, b.memid from Facilities f, Bookings b
-		WHERE f.facid = b.facid
-		AND f.facid in (0,1)) AS d
+    (SELECT  f.name AS name, b.memid FROM Facilities f, Bookings b
+    WHERE f.facid = b.facid
+    AND f.facid IN (0,1)) AS d
 WHERE m.memid = d.memid
 ORDER BY Name;
 
@@ -109,14 +109,14 @@ The output of facility name and total revenue, sorted by revenue. Remember
 that there's a different cost for guests and members! */
 SELECT Facility, SUM(Cost) AS Revenue
 FROM
-		(SELECT f.name AS Facility,
-			CASE
-					WHEN b.memid = 0 THEN f.guestcost*b.slots
-					ELSE f.membercost*b.slots
-			END  AS Cost
-		FROM Bookings b, Facilities f, Members m
-		WHERE m.memid = b.memid
-		AND f.facid = b.facid) AS d
+    (SELECT f.name AS Facility,
+      CASE
+          WHEN b.memid = 0 THEN f.guestcost*b.slots
+          ELSE f.membercost*b.slots
+      END  AS Cost
+    FROM Bookings b, Facilities f, Members m
+    WHERE m.memid = b.memid
+    AND f.facid = b.facid) AS d
 GROUP BY Facility
 HAVING Revenue < 1000
 ORDER BY Revenue DESC;
